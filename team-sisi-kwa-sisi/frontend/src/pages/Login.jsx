@@ -17,7 +17,7 @@ export default function Login() {
     setLoading(true);
     setMessage("");
     try {
-      const res = await fetch("http://127.0.0.1:8005/api/accounts/login/", {
+      const res = await fetch("http://127.0.0.1:8005/api/accounts/api/token/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,6 +37,7 @@ export default function Login() {
       } else {
         setMessage(data.detail || "Invalid credentials.");
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setMessage("Network error. Please try again.");
     }

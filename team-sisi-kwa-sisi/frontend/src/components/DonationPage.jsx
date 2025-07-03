@@ -8,10 +8,10 @@ import React, { useState } from "react";
 
 export default function DonationPage() {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    user: "",
+    method: "",
+    case: "",
     amount: "",
-    message: "",
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -24,17 +24,21 @@ export default function DonationPage() {
     e.preventDefault();
     setSuccess(false);
     setError("");
+    const token = localStorage.getItem("access");
+    
     try {
       const res = await fetch("http://127.0.0.1:8005/api/donations/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          
         },
         body: JSON.stringify(form),
       });
       if (res.ok) {
         setSuccess(true);
-        setForm({ name: "", email: "", amount: "", message: "" });
+        setForm({ user: "", method: "", case: "", amount: "" });
       } else {
         const data = await res.json();
         setError(
@@ -83,9 +87,9 @@ export default function DonationPage() {
           Your contribution helps us empower more communities. Every donation counts!
         </p>
         <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
+          type="username"
+          name="usrrname"
+          placeholder="username"
           value={form.name}
           onChange={handleChange}
           required
@@ -97,21 +101,26 @@ export default function DonationPage() {
             border: "1px solid #cbd5e0",
           }}
         />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            marginBottom: "1rem",
-            borderRadius: "0.5rem",
-            border: "1px solid #cbd5e0",
-          }}
-        />
+      <label>Donation Method</label>
+      <select
+        name="method"
+        value={form.method}
+        onChange={handleChange}
+        required
+        style={{
+          width: "100%",
+          padding: "0.75rem",
+          marginBottom: "1rem",
+          borderRadius: "0.5rem",
+          border: "1px solid #cbd5e0",
+        }}
+      >
+        <option value="">Select method</option>
+        <option value="CASH">Cash</option>
+        <option value="INKIND">In-kind</option>
+        <option value="BANK">Bank Transfer</option>
+        <option value="MOBILE">Mobile Money</option>
+        </select>
         <input
           type="number"
           name="amount"
@@ -128,21 +137,25 @@ export default function DonationPage() {
             border: "1px solid #cbd5e0",
           }}
         />
-        <textarea
-          name="message"
-          placeholder="Message (optional)"
-          value={form.message}
+        <label>Case</label>
+        <select
+          name="case"
+          value={form.case}
           onChange={handleChange}
-          rows={3}
+          required
           style={{
             width: "100%",
             padding: "0.75rem",
-            marginBottom: "1.5rem",
+            marginBottom: "1rem",
             borderRadius: "0.5rem",
             border: "1px solid #cbd5e0",
-            resize: "none",
           }}
-        />
+        >
+          <option value="">Select Case</option>
+          <option value="1">Michael Oselu - school fees - critical</option>
+          <option value="2">Medical Aid for Elderly</option>
+        </select>
+
         <button
           type="submit"
           style={{

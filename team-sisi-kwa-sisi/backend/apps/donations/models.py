@@ -12,7 +12,7 @@ class Donation(models.Model):
     method = models.CharField(max_length=10, choices=DONATION_METHODS)
     message = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    case = models.ForeignKey('requests.HelpRequest', on_delete=models.CASCADE)
+    case = models.ForeignKey('requests.HelpRequest', on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return f"{self.user.username} - {self.amount} - {self.method}"
